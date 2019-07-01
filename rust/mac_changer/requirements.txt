@@ -1,0 +1,15 @@
+appdirs==1.4.3
+attrs==19.1.0
+autopep8==1.4.4
+black==19.3b0
+Click==7.0
+entrypoints==0.3
+flake8==3.7.7
+jedi==0.14.0
+mccabe==0.6.1
+parso==0.5.0
+pycodestyle==2.5.0
+pyflakes==2.1.1
+rope==0.14.0
+toml==0.10.0
+yapf==0.27.0
