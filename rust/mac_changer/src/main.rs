@@ -40,21 +40,54 @@ fn main() {
     }
 }
 
-fn change_mac_address(interface: &String, mac_address: &String) -> bool {
+fn down_interface(interface: &String) -> bool {
     let mut mac_down = Command::new("ifconfig");
     mac_down.arg(&interface);
     mac_down.arg("down");
+    match mac_down.output() {
+        Ok(_o) => {
+            return true;
+        }
+        Err(_e) => {
+            return false;
+        }
+    }
+}
 
-    // let mut mac_change = Command::new("ifconfig");
-    // mac_change.arg(&interface);
-    // mac_change.arg("hw ether");
-    // mac_change.arg(&mac_address);
+fn up_interface(interface: &String) -> bool {
+    let mut mac_up = Command::new("ifconfig");
+    mac_up.arg(&interface);
+    mac_up.arg("up");
+    match mac_up.output() {
+        Ok(_o) => {
+            return true;
+        }
+        Err(_e) => return false,
+    }
+}
 
-    // let mut mac_up = Command::new("ifconfig");
-    // mac_up.arg(&interface);
-    // mac_up.arg("up");
-
-    return true;
+fn change_mac_address(interface: &String, mac_address: &String) -> bool {
+    if down_interface(&interface) {
+        let mut mac_change = Command::new("ifconfig");
+        mac_change.arg(&interface);
+        mac_change.arg("hw");
+        mac_change.arg("ether");
+        mac_change.arg(&mac_address);
+        match mac_change.output() {
+            Ok(_o) => {
+                if up_interface(&interface) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            Err(_e) => {
+                return false;
+            }
+        }
+    } else {
+        return false;
+    }
 }
 
 fn validate_mac_address(mac_address: &String) -> bool {
